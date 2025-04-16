@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="description"
+        content="We presented Generative Predictive Control (GPC), a learning control paradigm that combines a generative policy with a predictive world model during online planning.">
+  <meta name="keywords" content="Robot Learning: Model Learning, Robot Planning, Robot Learning: Imitation Learning, Perceptual Learning">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Strengthening Generative Robot Policies through Predictive World Modeling</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap JS (with Popper.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro" rel="stylesheet">
+
+  <link rel="stylesheet" href="./static/css/bulma.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="./static/css/index.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script defer src="./static/js/fontawesome.all.min.js"></script>
+  <script src="./static/js/bulma-carousel.min.js"></script>
+  <script src="./static/js/bulma-slider.min.js"></script>
+  <!-- <script src="./static/js/index.js"></script> -->
+</head>
+<body>
+
+<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
+  </div>
+  <div class="navbar-menu">
+    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
+      <a class="navbar-item" href="https://keunhong.com">
+      <span class="icon">
+          <i class="fas fa-home"></i>
+      </span>
+      </a>
+
+      <div class="navbar-item has-dropdown is-hoverable">
+        <a class="navbar-link">
+          More Research
+        </a>
+        <div class="navbar-dropdown">
+          <a class="navbar-item" href="https://hypernerf.github.io">
+            HyperNeRF
+          </a>
+          <a class="navbar-item" href="https://nerfies.github.io">
+            Nerfies
+          </a>
+          <a class="navbar-item" href="https://latentfusion.github.io">
+            LatentFusion
+          </a>
+          <a class="navbar-item" href="https://photoshape.github.io">
+            PhotoShape
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</nav> -->
+
+
+<section class="hero">
+  <div class="hero-body">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered">
+        <div class="column has-text-centered">
+          <h1 class="title is-1 publication-title">
+            Strengthening Generative Robot Policies through Predictive World Modeling
+          </h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+<!-- World Model Prediction. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">World Model Prediction</h2>
+
+    <!-- PushT World Model -->
+    <h3 class="title is-4">
+      Plain Push-T
+    </h3>
+
+    <!-- PushT GPC-RANK World Model -->
+    <div class="columns">
+      <div class="column is-centered">
+        <div class="content has-text-centered">
+          <video id="real_pushT_GPC_RANK_world_model" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/real_world_world_model_pred_demos/pushT_GPC_RANK_world_model_pred_eval_4.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            World Model Prediction in GPC-RANK.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- PushT GPC-RANK World Model -->
+
+    <!-- PushT GPC-OPT World Model -->
+    <div class="columns">
+      <div class="column is-centered">
+        <div class="content has-text-centered">
+          <video id="real_pushT_GPC_OPT_world_model" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/real_world_world_model_pred_demos/pushT_GPC_OPT_world_model_pred_eval_8.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            World Model Prediction in GPC-OPT.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- PushT GPC-OPT World Model -->
+    <!-- PushT World Model -->
+
+    <!-- PushTA World Model -->
+    <h3 class="title is-4">
+      Push-T collided with A
+    </h3>
+
+    <!-- PushTA GPC-RANK World Model -->
+    <div class="columns">
+      <div class="column is-centered">
+        <div class="content has-text-centered">
+          <video id="real_pushTA_GPC_RANK_world_model" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/real_world_world_model_pred_demos/pushTA_GPC_RANK_world_model_pred_eval_1.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            World Model Prediction in GPC-RANK.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- PushTA GPC-RANK World Model -->
+
+    <!-- PushTA GPC-OPT World Model -->
+    <div class="columns">
+      <div class="column is-centered">
+        <div class="content has-text-centered">
+          <video id="real_pushTA_GPC_OPT_world_model" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/real_world_world_model_pred_demos/pushTA_GPC_OPT_world_model_pred_eval_1.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            World Model Prediction in GPC-OPT.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- PushTA GPC-OPT World Model -->
+    <!-- PushTA World Model -->
+
+    <!-- PushART World Model -->
+    <h3 class="title is-4">
+      Push-T collided with A & R
+    </h3>
+
+    <!-- PushART GPC-RANK World Model -->
+    <div class="columns">
+      <div class="column is-centered">
+        <div class="content has-text-centered">
+          <video id="real_pushART_GPC_RANK_world_model" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/real_world_world_model_pred_demos/pushART_GPC_RANK_world_model_pred_eval_2.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            World Model Prediction in GPC-RANK.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- PushART GPC-RANK World Model -->
+
+    <!-- PushART GPC-OPT World Model -->
+    <div class="columns">
+      <div class="column is-centered">
+        <div class="content has-text-centered">
+          <video id="real_pushART_GPC_OPT_world_model" autoplay controls muted loop playsinline height="100%">
+            <source src="./static/videos/real_world_world_model_pred_demos/pushART_GPC_OPT_world_model_pred_eval_0.mp4"
+                    type="video/mp4">
+          </video>
+          <p>
+            World Model Prediction in GPC-OPT.
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- PushART GPC-OPT World Model -->
+    <!-- PushART World Model -->
+  </div>
+</section>
+<!-- World Model Prediction. -->
+
+<!-- Real-World Evaluation. -->
+<section class="section">
+  <div class="container is-max-desktop">
+    <h2 class="title is-3">Real-world Evaluation</h2>
+
+    <!-- Real-World All Videos. -->
+    <h3 class="title is-4">
+      Check all real-world evalutaion results (by clicking the titles)
+    </h3>
+    
+    <!-- PushT 10 tests -->
+    <h4 class="title is-5">
+      <a data-bs-toggle="collapse" href="#real_pushT_gt_eval">
+        Plain Push-T: Baseline (5 out of 10) vs. GPC-RANK (7 out of 10) vs. GPC-OPT (7 out of 10)
+      </a>
+    </h4>
+
+    <div class="collapse" id="real_pushT_gt_eval" style="margin-bottom: 40px;">
+      <!-- PushT test0 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test0 -->
+
+      <!-- PushT test1 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 1: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test1 -->
+
+      <!-- PushT test2 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test2 -->
+      
+      <!-- PushT test3 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 3: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test3 -->
+
+      <!-- PushT test4 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 4: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 4: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 4: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test4 -->
+
+      <!-- PushT test5 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_5" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_5.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 5: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_5" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_5.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 5: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_5" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_5.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 5: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test5 -->
+
+      <!-- PushT test6 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_6" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_6.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 6: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_6" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_6.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 6: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_6" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_6.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 6: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test6 -->
+
+      <!-- PushT test7 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_7" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_7.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 7: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_7" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_7.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 7: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_7" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_7.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 7: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test7 -->
+
+      <!-- PushT test8 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_8" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_8.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 8: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_8" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_8.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 8: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_8" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_8.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 8: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test8 -->
+
+      <!-- PushT test9 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_baseline_gt_eval_9" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_baseline/eval_demo_gt_9.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 9: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_RANK_gt_eval_9" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_RANK/eval_demo_gt_9.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 9: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushT_GPC_OPT_gt_eval_9" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushT_GPC_OPT/eval_demo_gt_9.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 9: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushT test9 -->
+
+    </div>
+    <!-- PushT 10 tests --> 
+
+    <!-- PushTA 5 tests -->
+    <h4 class="title is-5">
+      <a data-bs-toggle="collapse" href="#real_pushTA_gt_eval">
+        Push-T collided with A: Baseline (2 out of 5) vs. GPC-RANK (4 out of 5) vs. GPC-OPT (3 out of 5)
+      </a>
+    </h4>
+
+    <div class="collapse" id="real_pushTA_gt_eval" style="margin-bottom: 40px;">
+      <!-- PushTA test0 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_baseline_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_baseline/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 0: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_RANK_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_RANK/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_OPT_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_OPT/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTA test0 -->
+
+      <!-- PushTA test1 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_baseline_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_baseline/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_RANK_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_RANK/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_OPT_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_OPT/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTA test1 -->
+
+      <!-- PushTA test2 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_baseline_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_baseline/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 2: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_RANK_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_RANK/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_OPT_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_OPT/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 2: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTA test2 -->
+
+      <!-- PushTA test3 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_baseline_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_baseline/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_RANK_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_RANK/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_OPT_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_OPT/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTA test3 -->
+
+      <!-- PushTA test4 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_baseline_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_baseline/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 4: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_RANK_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_RANK/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 4: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTA_GPC_OPT_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTA_GPC_OPT/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 4: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTA test4 -->
+    </div>
+    <!-- PushTA 5 tests -->
+
+    <!-- PushART 5 tests -->
+    <h4 class="title is-5">
+      <a data-bs-toggle="collapse" href="#real_pushART_gt_eval">
+        Push-T collided with A & R: Baseline (2 out of 5) vs. GPC-RANK (3 out of 5) vs. GPC-OPT (4 out of 5)
+      </a>
+    </h4>
+
+    <div class="collapse" id="real_pushART_gt_eval" style="margin-bottom: 40px;">
+      <!-- PushART test0 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_baseline_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_baseline/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_RANK_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_RANK/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_OPT_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_OPT/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushART test0 -->
+
+      <!-- PushART test1 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_baseline_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_baseline/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_RANK_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_RANK/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_OPT_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_OPT/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushART test1 -->
+
+      <!-- PushART test2 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_baseline_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_baseline/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 2: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_RANK_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_RANK/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_OPT_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_OPT/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushART test2 -->
+
+      <!-- PushART test3 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_baseline_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_baseline/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_RANK_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_RANK/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_OPT_gt_eval_3" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_OPT/eval_demo_gt_3.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 3: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushART test3 -->
+
+      <!-- PushART test4 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_baseline_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_baseline/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 4: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_RANK_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_RANK/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 4: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushART_GPC_OPT_gt_eval_4" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushART_GPC_OPT/eval_demo_gt_4.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 4: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushART test4 -->
+    </div>
+    <!-- PushART 5 tests -->
+
+    <!-- PushTR 3 tests -->
+    <h4 class="title is-5">
+      <a data-bs-toggle="collapse" href="#real_pushTR_gt_eval">
+        Push-T collided with R: Baseline (2 out of 3) vs. GPC-RANK (3 out of 3) vs. GPC-OPT (3 out of 3)
+      </a>
+    </h4>
+
+    <div class="collapse" id="real_pushTR_gt_eval" style="margin-bottom: 40px;">
+      <!-- PushTR test0 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_baseline_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_baseline/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_GPC_RANK_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_GPC_RANK/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_GPC_OPT_gt_eval_0" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_GPC_OPT/eval_demo_gt_0.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 0: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTR test0 -->
+
+      <!-- PushTR test1 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_baseline_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_baseline/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_GPC_RANK_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_GPC_RANK/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_GPC_OPT_gt_eval_1" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_GPC_OPT/eval_demo_gt_1.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 1: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTR test1 -->
+
+      <!-- PushTR test2 -->
+      <div class="columns">
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_baseline_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_baseline/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              Baseline Test 2: <span class="red-text">Failure</span>.
+            </p>
+          </div>
+        </div>
+        
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_GPC_RANK_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_GPC_RANK/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-RANK Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+
+        <div class="column is-centered">
+          <div class="content has-text-centered">
+            <video id="real_pushTR_GPC_OPT_gt_eval_2" autoplay controls muted loop playsinline height="100%">
+              <source src="./static/videos/real_world_GT_eval_demos/pushTR_GPC_OPT/eval_demo_gt_2.mp4"
+                      type="video/mp4">
+            </video>
+            <p>
+              GPC-OPT Test 2: <span class="green-text">Success</span>.
+            </p>
+          </div>
+        </div>
+      </div>
+      <!-- PushTR test2 -->
+    </div>
+    <!-- PushTR 3 tests -->
+
+  </div>
+</section>
+<!-- Real-World Evaluation. -->
+
+
+
+</body>
+</html>
